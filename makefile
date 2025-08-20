@@ -32,11 +32,20 @@ else ifeq ($(linux_x86),1)
   CFLAGS += -m32
   CLIENTEXE := $(BINDIR)/postal1-x86
 else ifeq ($(macosx_arm64),1)
-  target := macosx_x86
-  CLIENTEXE := $(BINDIR)/postal1-x86
+  target := macosx_arm64
+  CLIENTEXE := $(BINDIR)/postal1-arm64
+  CFLAGS += -arch arm64
+  LDFLAGS += -arch arm64
 else ifeq ($(macosx_x86),1)
   target := macosx_x86
   CLIENTEXE := $(BINDIR)/postal1-x86
+  CFLAGS += -arch i386
+  LDFLAGS += -arch i386
+else ifeq ($(macosx_x86_64),1)
+  target := macosx_x86_64
+  CLIENTEXE := $(BINDIR)/postal1-x86_64
+  CFLAGS += -arch x86_64
+  LDFLAGS += -arch x86_64
 else
   target := linux_x86_64
   CLIENTEXE := $(BINDIR)/postal1-x86_64
@@ -68,6 +77,13 @@ endif
 ifeq ($(strip $(target)),macosx_arm64)
   macosx := true
   CPUARCH := arm64
+  CC := gcc
+  CXX := g++
+  LINKER := g++
+endif
+ifeq ($(strip $(target)),macosx_x86_64)
+  macosx := true
+  CPUARCH := x86_64
   CC := gcc
   CXX := g++
   LINKER := g++
@@ -311,14 +327,14 @@ ifeq ($(strip $(expiring_beta)),true)
 endif
 
 ifeq ($(strip $(macosx)),true)
-  CFLAGS += -arch arm64 -mmacosx-version-min=10.6
-  LDFLAGS += -arch arm64 -mmacosx-version-min=10.6
+  CFLAGS += -mmacosx-version-min=10.6
+  LDFLAGS += -mmacosx-version-min=10.6
   LDFLAGS += -framework CoreFoundation -framework Cocoa
-  LIBS += /opt/homebrew/lib/libSDL2.dylib
+  LIBS += /usr/local/lib/libSDL2.dylib
   STEAMLDFLAGS += steamworks/sdk/redistributable_bin/osx32/libsteam_api.dylib
 else
   ifeq ($(CPUARCH),arm)
-    LIBS += -L/opt/homebrew/lib/libSDL2.dylib;-lSDL2
+    LIBS += -lSDL2
   else
 	ifeq ($(CPUARCH),x86_64)
 	  LIBS += -lSDL2
