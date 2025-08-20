@@ -1,0 +1,16 @@
+// .vscode/launch.json
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug with lldb",
+            "type": "lldb",
+            "request": "launch",
+            "program": "${workspaceFolder}/bin/postal1-x86",
+            "args": [],
+            "cwd": "${workspaceFolder}/bin",
+            "preLaunchTask": "Build with make",
+            "stopOnEntry": false
+        }
+    ]
+}

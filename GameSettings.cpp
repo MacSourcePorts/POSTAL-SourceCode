@@ -334,9 +334,23 @@ int16_t CGameSettings::LoadPrefs(
 	{
 	int16_t sResult = 0;
 
+#if defined(PLATFORM_MACOSX)
+    static char prefpath[PATH_MAX];
+	const char *homedir = getenv("HOME");
+	// if ( (!homedir) || ((strlen(homedir) + 32) >= sizeof (prefpath)) )
+	// 	homedir = "./";  // oh well.
+
+	strcpy(prefpath, homedir);
+	if (prefpath[strlen(prefpath)-1] != '/') strcat(prefpath, "/");
+
+	strcat(prefpath, "Library/Application Support/Postal Plus/");
+#endif
+
 	pPrefs->GetVal("Paths", "CD", "", m_pszCDPath);
 #if defined(PANDORA) || defined(ODROID)
 	strcpy(m_pszCDPath, ".");
+#elif defined(PLATFORM_MACOSX)
+	strcpy(m_pszCDPath, prefpath);
 #endif
 
 	sResult = (strlen(m_pszCDPath) + 1) <= RSP_MAX_PATH ? 0 : -1;
@@ -348,6 +362,8 @@ int16_t CGameSettings::LoadPrefs(
 	pPrefs->GetVal("Paths", "HD", "", m_pszHDPath);
 #if defined(PANDORA) || defined(ODROID)
 	strcpy(m_pszHDPath, ".");
+#elif defined(PLATFORM_MACOSX)
+	strcpy(m_pszHDPath, prefpath);
 #endif
 	sResult = (strlen(m_pszHDPath) + 1) <= RSP_MAX_PATH ? 0 : -1;
 	if (sResult == 0)
@@ -358,6 +374,8 @@ int16_t CGameSettings::LoadPrefs(
 	pPrefs->GetVal("Paths", "VD", "", m_pszVDPath);
 #if defined(PANDORA) || defined(ODROID)
 	strcpy(m_pszVDPath, ".");
+#elif defined(PLATFORM_MACOSX)
+	strcpy(m_pszVDPath, prefpath);
 #endif
 	sResult = (strlen(m_pszVDPath) + 1) <= RSP_MAX_PATH ? 0 : -1;
 	if (sResult == 0)
@@ -368,6 +386,8 @@ int16_t CGameSettings::LoadPrefs(
 	pPrefs->GetVal("Paths", "Sound", "", m_pszSoundPath);
 #if defined(PANDORA) || defined(ODROID)
 	strcpy(m_pszSoundPath, ".");
+#elif defined(PLATFORM_MACOSX)
+	strcpy(m_pszSoundPath, prefpath);
 #endif
 	sResult = (strlen(m_pszSoundPath) + 1) <= RSP_MAX_PATH ? 0 : -1;
 	if (sResult == 0)
@@ -378,6 +398,8 @@ int16_t CGameSettings::LoadPrefs(
 	pPrefs->GetVal("Paths", "Game", "", m_pszGamePath);
 #if defined(PANDORA) || defined(ODROID)
 	strcpy(m_pszGamePath, ".");
+#elif defined(PLATFORM_MACOSX)
+	strcpy(m_pszGamePath, prefpath);
 #endif
 	sResult = (strlen(m_pszGamePath) + 1) <= RSP_MAX_PATH ? 0 : -1;
 	if (sResult == 0)
@@ -388,6 +410,8 @@ int16_t CGameSettings::LoadPrefs(
 	pPrefs->GetVal("Paths", "Hoods", "", m_pszHoodsPath);
 #if defined(PANDORA) || defined(ODROID)
 	strcpy(m_pszHoodsPath, ".");
+#elif defined(PLATFORM_MACOSX)
+	strcpy(m_pszHoodsPath, prefpath);
 #endif
 	sResult = (strlen(m_pszHoodsPath) + 1) <= RSP_MAX_PATH ? 0 : -1;
 	if (sResult == 0)

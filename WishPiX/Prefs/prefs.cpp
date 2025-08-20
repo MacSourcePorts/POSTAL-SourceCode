@@ -288,6 +288,11 @@ int16_t RPrefs::Read()		// Returns 0 if successfull, non-zero otherwise
 						if (pszFixedLine[len - 1] == '\n')
 							pszFixedLine[len - 1] = '\0';
 
+						// Remove carriage return (if any) from end of line
+						len = strlen(pszFixedLine);
+						if (pszFixedLine[len - 1] == '\r')
+							pszFixedLine[len - 1] = '\0';
+
 						// Find first non-space char
 						char* pszToken = pszFixedLine;
 						while ((*pszToken != '\0') && isspace(*pszToken))
@@ -396,8 +401,8 @@ int16_t RPrefs::Write()
 							for (RPrefsLineList::Pointer i = m_pllLines.GetHead(); i != 0; i = m_pllLines.GetNext(i))
 								{
 								int res = fprintf(pfileTmp, "%s\n", m_pllLines.GetData(i)->GetLine());
-								if ((res >= 0) && m_sUseCRLF)
-									res = fprintf(pfileTmp, "\r");
+								// if ((res >= 0) && m_sUseCRLF)
+								// 	res = fprintf(pfileTmp, "\r");
 								if(res < 0)
 									{
 									TRACE("RPrefs::Write(): fprintf() data to temp file: %s\n", strerror(errno));
